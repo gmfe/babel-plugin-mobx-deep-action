@@ -1,7 +1,6 @@
 # babel-plugin-mobx-deep-action
 
-[![Build Status](https://travis-ci.org/mobxjs/babel-plugin-mobx-deep-action.svg?branch=master)](https://travis-ci.org/mobxjs/babel-plugin-mobx-deep-action)
-[![npm version](https://badge.fury.io/js/babel-plugin-mobx-deep-action.svg)](https://badge.fury.io/js/babel-plugin-mobx-deep-action)
+[![npm version](https://badge.fury.io/js/%40gmfe%2Fbabel-plugin-mobx-deep-action.svg)](https://badge.fury.io/js/%40gmfe%2Fbabel-plugin-mobx-deep-action)
 
 假设，把动作内部创建的所有代码视为动作来处理，不用在单独使用 action 标记异步函数。
 
