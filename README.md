@@ -3,20 +3,17 @@
 [![Build Status](https://travis-ci.org/mobxjs/babel-plugin-mobx-deep-action.svg?branch=master)](https://travis-ci.org/mobxjs/babel-plugin-mobx-deep-action)
 [![npm version](https://badge.fury.io/js/babel-plugin-mobx-deep-action.svg)](https://badge.fury.io/js/babel-plugin-mobx-deep-action)
 
-Allow to reduce boilerplate of writing async actions.
-Based on assumption, that all code created inside an action,
-should be handled as action too.
+假设，把动作内部创建的所有代码视为动作来处理，不用在单独使用 action 标记异步函数。
 
-This plugin scans for all functions, marked as actions, and then marks all
-nested functions, which created inside actions as actions too.
+插件会扫描全部函数，标记 action，然后使用相应的 action 包裹其内部函数。
 
-* [Usage with async and generator functions](#toc-usage-async)
-* [Typescript decorators](#toc-typescript-decorators)
-* [Use other package](#toc-mobx-package)
+* [使用 async and generator 函数](#toc-usage-async)
+* [Typescript 装饰模式](#toc-typescript-decorators)
+* [使用其他包](#toc-mobx-package)
 
-## Example
+## 例子
 
-**In**
+**输入**
 
 ```js
 import { action } from "mobx";
@@ -28,7 +25,7 @@ action(function doSome() {
 });
 ```
 
-**Out**
+**输出**
 
 ```js
 "use strict";
@@ -42,9 +39,13 @@ action(function doSome() {
 });
 ```
 
-## Caveats
+## 警告
 
-Plugin support only ES6 imports. Only these imports are supported:
+插件支持 ES6 的 import，如果没有使用 makeAutoObserver 需要导入了 action 才能支持使用。
+
+**如果使用了 makeAutoObserver 可以不用导入 action，我已处理。**
+
+只支持以下导入方式，如下:
 ```
 import {action} from "mobx";
 ```
@@ -57,7 +58,7 @@ import * as mobx from "mobx";
 ```
 import * as mobxAlias from "mobx";
 ```
-For example, these cases are **not supported**:
+这些例子，**不支持**:
 ```
 const mobx = require("mobx")
 ```
@@ -74,15 +75,15 @@ action(function() {});
 ```
 
 
-## Installation
+## 安装
 
 ```sh
 $ npm install babel-plugin-mobx-deep-action
 ```
 
-## Usage
+## 使用
 
-### Via `.babelrc` (Recommended)
+### 通过 `.babelrc` (推荐)
 
 **.babelrc**
 
@@ -92,13 +93,13 @@ $ npm install babel-plugin-mobx-deep-action
 }
 ```
 
-### Via CLI
+### 通过 babel 编译
 
 ```sh
 $ babel --plugins mobx-deep-action script.js
 ```
 
-### Via Node API
+### 通过 babel node api 编译
 
 ```javascript
 require("babel-core").transform("code", {
@@ -107,13 +108,13 @@ require("babel-core").transform("code", {
 ```
 
 
-## <a id="toc-usage-async"></a> Usage for async and generator functions.
+## <a id="toc-usage-async"></a> 使用 async and generator 函数.
 
-see https://github.com/Strate/babel-plugin-mobx-async-action
+请看 https://github.com/Strate/babel-plugin-mobx-async-action
 
-## <a id="toc-typescript-decorators"></a> Typescript decorators.
+## <a id="toc-typescript-decorators"></a>Typescript 装饰模式.
 
-This plugin could handle decorators code, emitted from typescript, such as:
+本插件可以通过装饰代码来绑定，并输出 typescript，如下：
 
 ```js
 import * as tslib_1 from "tslib";
@@ -129,14 +130,11 @@ tslib_1.__decorate([
 ], Class2.prototype, "method", null);
 ```
 
-To get this code worked, you should enable [importHelpers](https://www.typescriptlang.org/docs/handbook/compiler-options.html)
-compiler option, and get [tslib](https://www.npmjs.com/package/tslib) package installed. Also, typescript
-should emit es6 modules, so, you should target your compiler to es2015+. That's all,
-plugin detect import from "tslib" and handle typescript decorators.
+要使代码正常运行，你需要设置编译配置[importHelpers](https://www.typescriptlang.org/docs/handbook/compiler-options.html) 和安装依赖包[tslib](https://www.npmjs.com/package/tslib)。 并且, typescript 需要要输出 es6 modules，所以你应该把生产环境调到es2015+。插件会检查，如果导入了`tslib` 会绑定对应装饰代码。
 
-## <a id="toc-mobx-package"></a> Use other package.
+## <a id="toc-mobx-package"></a> 使用其他包.
 
-If you use wrapper for "mobx" package, you can pass it's name to plugin:
+如果你使用了别名替换 mobx， 你快可以通过配置对应 plugin 的配置，如下：
 
 #### .babelrc
 
